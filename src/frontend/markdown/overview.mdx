@@ -1,0 +1,43 @@
+import { Card, Timeline, Typography, Tabs } from 'antd'
+import Link from 'next/link';
+
+Lightning Jackpot is a provably fair gaming platform.
+
+"In online gambling provably fair describes an algorithm which can be analyzed and verified for fairness on the part of the service operator. "
+
+### Open source!
+
+The rabbit hole got quite deep! We ended up creating a Provably Fair Framework and are happy to share it with everybody.
+
+You can find and read more about it <a href="https://github.com/matthewlilley/provably-fair-framework" target="_blank" rel="noopener noreferrer">here</a>.
+
+### RNG
+
+Every game on Lightning Jackpot uses a RNG (Random Number Generator), a number of inputs are passed to it, which are transformed into a
+number of outputs.
+
+### Inputs
+
+Inputs are composed of a Seed Pair (Server Seed & Client Seed) and Nonce (Instance Identifier). The Client Seed, None and SHA256 hash of the Server Seed are known publically before a game outcome is determained.
+
+### Seed Pair Lifecycle
+
+<div style={{
+  padding: '12px 24px 12px',
+}}>
+  <Timeline>
+    <Timeline.Item>A Seed Pair (Server Seed and Client Seed) is genrated.</Timeline.Item>
+    <Timeline.Item>A SHA256 Hash of the Server Seed (Server Hash) and Client Seed is commited to <Link href={{ pathname: '/provably-fair', query: { tab: 'seeds' } }} children={<a>Active</a>} shallow={true} />.</Timeline.Item>
+    <Timeline.Item style={{paddingBottom: 0}}>After 24 hours, a new Seed Pair is generated, and the Server Seed for the previous day is commited to <Link href={{ pathname: '/provably-fair', query: { tab: 'seeds' } }} children={<a>Previous</a>} shallow={true} />.</Timeline.Item>
+  </Timeline>
+</div>
+
+Once you have the complete Seed Pair, you can verify two things.
+
+Firstly, you can SHA256 hash the Server Seed and verify it matches the Server Seed Hash commited on the previous day.
+
+Secondly, you can use the Seed Pair to verify the outcome of any game instance which used that Seed Pair.
+
+<Link href={{ pathname: '/provably-fair', query: { tab: 'verify' } }} shallow={true}>
+  <a>Don't Trust. Verify!</a>
+</Link>

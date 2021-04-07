@@ -1,0 +1,164 @@
+.wheel {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wheel .pockets {
+  opacity: 0.3;
+}
+
+.wheel--spinning .pockets {
+  opacity: 1;
+}
+
+.wheel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 2px solid #262626;
+  transform: translate(-50%);
+}
+
+.wheel--vertical {
+  position: unset;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+  align-items: center;
+}
+
+.wheel--active {
+  opacity: 1;
+}
+
+.wheel--vertical::before {
+  top: 50%;
+  right: 0;
+  bottom: 50%;
+  left: 50%;
+  width: 70px;
+  border-top: 2px solid #262626;
+  border-left: 0;
+}
+
+.wheel--no-line::before {
+  border-top: 0;
+  border-left: 0;
+}
+
+.will-spin {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0) scale(1, 1);
+  transform: translateZ(0);
+}
+
+.pockets {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  will-change: transform;
+}
+
+.wheel--vertical .pockets {
+  flex-direction: column;
+  align-items: center;
+}
+
+.wheel-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+
+  z-index: 2;
+}
+
+.pocket {
+  height: 70px;
+  text-align: center;
+  width: 70px;
+  white-space: nowrap;
+  padding: 8px;
+}
+
+.pocket img,
+.pocket svg {
+  height: 100%;
+  width: auto;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.wheel.wheel--vertical .pocket img,
+.wheel.wheel--vertical .pocket svg {
+  height: auto;
+  width: 100%;
+  margin-left: 0;
+  margin-top: 50%;
+  transform: translateY(-50%);
+}
+
+@media (min-width: 576px) {
+  .pocket {
+    height: 70px;
+    width: 70px;
+  }
+  .wheel--vertical::before {
+    width: 100px;
+  }
+}
+
+@media (min-width: 768px) {
+  .pocket {
+    height: 90px;
+    width: 90px;
+  }
+  .wheel--vertical::before {
+    width: 110px;
+  }
+}
+
+@media (min-width: 992px) {
+  .pocket {
+    height: 100px;
+    width: 100px;
+  }
+  .wheel--vertical::before {
+    width: 120px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pocket {
+    height: 110px;
+    width: 110px;
+  }
+  .wheel--vertical::before {
+    width: 130px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .pocket {
+    height: 120px;
+    width: 120px;
+  }
+  .wheel--vertical::before {
+    width: 140px;
+  }
+}

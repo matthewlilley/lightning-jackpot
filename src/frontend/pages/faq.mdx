@@ -1,0 +1,66 @@
+import Link from "next/link";
+import { Card } from "antd";
+import { NextSeo } from "next-seo";
+
+<NextSeo title="FAQ" />
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+
+# FAQ
+
+## Q: What is Lightning Jackpot?
+
+Lightning Jackpot is a Provably Fair gaming platform powered by the Lightning Network.
+
+## Q: How can I play?
+
+Select your bet type, bear, moon, or bull. Input the value you wish to wager, and you'll see the potential win value. Hit the play button when you're ready to place your bet. Simple!
+
+## Q: How can I trust that the spins are fair?
+
+Lightning Jackpot uses a Provably Fair system. You can read more about that <Link href="/provably-fair" children={<a>here</a>} />.
+
+## Q: What are the minimum and maximum bets?
+
+The minimum bet is 1000 Satoshi.
+
+The maximum bet is dynamic, and based on a variety of factors, including but not limited to type, potential outcome, and system balance.
+
+## Q: How can I withdraw my winnings?
+
+Click the withdraw button. If you're using a WebLN compatible <a href="https://webln.dev" target="_blank" rel="noopener noreferrer" children="https://webln.dev" /> client, withdrwals are extremely simple. Just enter the value you wish to withdraw and click withdraw. If you're using a client which isn't WebLN compatible, you'll need to generate an invoice, input the payment request, and click withdraw.
+
+## Q: What are my odds?
+
+Bear & Bull 7/15
+
+Moon 1/15
+
+## Q: How does the progressive jackpot work?
+
+For each Bet, we'll add 0.04% of the value to the Progressive Jackpot. A Jackpot will be distributed among all active players based off their contribution towards the instance.
+
+Here's an example scenario:
+
+- Satoshi places a Bet of 10,000 SAT, the instance total is 100,000 SAT, and the Jackpot is 500,000 SAT.
+- It's a Jackpot!
+- Satoshi contributed 10% (10,000/100,000) towards the instance total,
+  and in-turn, is paid 50,000 SAT.
+
+## Q: Tip fee?
+
+There's a 0.025% fee when tipping, that fee will be added to the tip value.
+
+## Q: Rain fee?
+
+There's a 0.025% fee when raining, that fee will be added to the rain value.
+
+## Q: I bet X but Y was accepted, why?
+
+There are limits in place to ensure the application remains solvent. This shouldn't be noticable as the application grows.
+
+## Q: Satoshi?
+
+Satoshi is the smallest denomination of the Bitcoin currency recorded on the block chain. It is a one hundred millionth of a single Bitcoin (0.00000001 BTC). The unit has been named in collective homage to the creator of Bitcoin, Satoshi Nakamoto.
+
+</div>

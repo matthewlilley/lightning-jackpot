@@ -1,0 +1,36 @@
+
+apps:
+  - name: app
+    script: dist/backend/index.js
+    instances: 1
+    exec_mode: cluster
+    watch:
+      - dist/backend
+      - next.config.js
+    ignore_watch:
+      - dist/backend/tsconfig.tsbuildinfo
+      - dist/backend/invoice-stream.js
+      - dist/backend/roulette/worker.js
+      - dist/backend/scheduler
+      - dist/backend/queue
+
+  - name: invoice-stream
+    script: dist/backend/invoice-stream.js
+    watch: dist/backend/invoice-stream.js
+
+  - name: roulette
+    script: dist/backend/roulette/worker.js
+    watch: dist/backend/roulette
+    ignore_watch:
+      - dist/backend/roulette/http
+      - dist/backend/roulette/ws
+
+  - name: queue
+    script: dist/backend/queue/index.js
+    watch:
+      -  dist/backend/queue
+      -  dist/backend/queues
+
+  - name: scheduler
+    script: dist/backend/scheduler/index.js
+    watch: dist/backend/scheduler

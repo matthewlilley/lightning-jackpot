@@ -1,0 +1,19 @@
+config:
+  target: 'https://testnet.lightningjackpot.com'
+  http:
+    # Responses have to be sent within 10 seconds or the request will be aborted
+    timeout: 10
+    # All HTTP requests from all virtual users will be sent over the same 10 connections
+    pool: 1000
+  phases:
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: 'Warm up the application'
+    - duration: 600
+      arrivalRate: 50
+      name: 'Sustained max load'
+scenarios:
+  - flow:
+      - get:
+          url: '/'

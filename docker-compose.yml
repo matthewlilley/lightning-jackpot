@@ -1,0 +1,225 @@
+version: "3.7"
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  app:
+    driver: local
+  node_modules:
+    driver: local
+  shared:
+    driver: local
+  mysql-master-data:
+    driver: local
+  mysql-slave-data:
+    driver: local
+  redis-master-data:
+    driver: local
+services:
+  app:
+    env_file:
+      - .env
+    networks:
+      - app
+    depends_on:
+      - redis-sentinel
+      - redis-master
+      - redis-slave
+      - mysql-master
+      - mysql-slave
+    image: lightning-jackpot_app:${APP_ENV:-development}
+    build: .
+    # healthcheck:
+    #   test: ["CMD", "curl -f https://app:443 || exit 1"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
+    volumes:
+      - node_modules:/home/node/app/node_modules
+      - ./storage/tls.cert:/home/node/app/storage/tls.cert
+      - ./storage/admin.macaroon:/home/node/app/storage/admin.macaroon
+    command:
+      [
+        "/home/node/app/scripts/wait-for-mysql.sh",
+        "/home/node/app/scripts/run.sh",
+      ]
+    restart: always
+
+  mysql-master:
+    networks:
+      - app
+    image: bitnami/mysql:latest
+    ports:
+      - "33800:3306"
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_REPLICATION_MODE=master
+      - MYSQL_REPLICATION_USER=replicator
+      - MYSQL_REPLICATION_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - BITNAMI_DEBUG
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/bin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    volumes:
+      - "./docker/mysql/healthcheck:/bin/healthcheck:ro"
+      - "./docker/mysql/conf/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro"
+      - "mysql-master-data:/bitnami/mysql/data"
+    restart: on-failure
+
+  mysql-slave:
+    networks:
+      - app
+    image: bitnami/mysql:latest
+    ports:
+      - "3306"
+    depends_on:
+      - mysql-master
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_REPLICATION_MODE=slave
+      - MYSQL_REPLICATION_USER=replicator
+      - MYSQL_REPLICATION_PASSWORD
+      - MYSQL_MASTER_HOST=mysql-master
+      - MYSQL_MASTER_PORT_NUMBER
+      - MYSQL_MASTER_ROOT_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - BITNAMI_DEBUG
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/bin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    volumes:
+      - "./docker/mysql/healthcheck:/bin/healthcheck:ro"
+      - "./docker/mysql/conf/my_custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro"
+    restart: always
+
+  redis-master:
+    networks:
+      - app
+    image: "bitnami/redis:latest"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_PASSWORD
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+      - BITNAMI_DEBUG
+    ports:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/bin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - "./docker/redis/healthcheck:/bin/healthcheck:ro"
+      - "redis-master-data:/bitnami/redis/data"
+    restart: unless-stopped
+
+  redis-slave:
+    networks:
+      - app
+    depends_on:
+      - redis-master
+      - redis-sentinel
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_SENTINEL_HOST
+      - REDIS_SENTINEL_PORT_NUMBER
+      - REDIS_SENTINEL_MASTER_NAME=mymaster
+      - REDIS_MASTER_HOST
+      - REDIS_MASTER_PORT_NUMBER
+      - REDIS_MASTER_PASSWORD
+      - REDIS_PASSWORD
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+      - BITNAMI_DEBUG
+    ports:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/bin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - "./docker/redis/healthcheck:/bin/healthcheck:ro"
+    restart: unless-stopped
+
+  redis-sentinel:
+    networks:
+      - app
+    depends_on:
+      - redis-master
+    image: bitnami/redis-sentinel:latest
+    environment:
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD
+      - REDIS_MASTER_PORT_NUMBER
+      - REDIS_MASTER_SET
+      - REDIS_SENTINEL_PORT_NUMBER
+      - REDIS_SENTINEL_QUORUM
+      - BITNAMI_DEBUG
+    ports:
+      - "26379"
+    volumes:
+      - "./docker/redis-sentinel/healthcheck:/bin/healthcheck:ro"
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/bin/healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  nginx:
+    networks:
+      - app
+    build: ./docker/nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./storage/certbot/conf:/etc/letsencrypt
+      - ./storage/certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+  certbot:
+    networks:
+      - app
+    image: certbot/dns-cloudflare
+    restart: unless-stopped
+    volumes:
+      - ./storage/certbot/conf:/etc/letsencrypt
+      - ./storage/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  # varnish:
+  #   build:
+  #     context: ./docker/varnish
+  #     target: varnish
+  #   depends_on:
+  #     - app
+  #   volumes:
+  #     - ./docker/varnish/:/usr/local/etc/varnish:ro
+  #   tmpfs:
+  #     - /usr/local/var/varnish:exec
+  #   ports:
+  #     - '80:80'

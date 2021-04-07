@@ -1,0 +1,141 @@
+import { Typography } from 'antd';
+import d3 from 'd3';
+import randomColor from 'randomcolor';
+import React, { Component } from 'react';
+import {
+  HorizontalGridLines,
+  LineSeries,
+  Treemap,
+  VerticalGridLines,
+  XAxis,
+  XYPlot,
+  YAxis,
+} from 'react-vis';
+import 'react-vis/dist/style.css';
+
+function randomData(total) {
+  const totalLeaves = total || Math.random() * 20;
+  const leaves = [];
+  for (let i = 0; i < totalLeaves; i++) {
+    leaves.push({
+      name: total ? total : String(Math.random()).slice(0, 3),
+      size: Math.random() * 1000,
+      color: Math.random(),
+      style: {
+        border: 'thin solid red',
+      },
+    });
+  }
+  return {
+    title: '',
+    color: 1,
+    children: leaves,
+  };
+}
+
+export default class extends Component<any, any> {
+  state = {
+    name: 'Jackpot',
+    total: 20,
+    data: {
+      title: '',
+      color: 1,
+      children: [],
+    },
+    plot: [{ x: 0, y: 0 }],
+  };
+  loop = () => {
+    console.log('start loop');
+    const random = Math.round(Math.random() * (3000 - 500)) + 500;
+    setTimeout(() => {
+      console.log('loop');
+      const size = Math.floor(Math.random() * 1000);
+      const data = {
+        ...this.state.data,
+        children: [
+          ...this.state.data.children,
+          {
+            color: randomColor({
+              luminosity: 'light',
+            }),
+            name: `${size} TICKETS`,
+            size,
+            style: {},
+          },
+        ],
+      };
+      this.setState({ data, total: this.state.total - 1 });
+      if (this.state.total > 0) {
+        this.loop();
+      } else {
+        this.setState({
+          data: {
+            ...this.state.data,
+            children: this.state.data.children.map((child, i) => {
+              return {
+                ...child,
+                color: i === 1 ? child.color : this.convertHex(child.color, 10),
+              };
+            }),
+          },
+        });
+      }
+    }, random);
+  };
+  convertHex(hex, opacity) {
+    const withoutHash = hex.replace('#', '');
+    const r = parseInt(withoutHash.substring(0, 2), 16);
+    const g = parseInt(withoutHash.substring(2, 4), 16);
+    const b = parseInt(withoutHash.substring(4, 6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
+  }
+  componentDidMount() {
+    this.loop();
+    // let count = 1;
+    // const intervalId = setInterval(() => {
+    //   const data = {
+    //     plot : [
+    //       ...this.state.plot,
+    //       {x: count, y: count}
+    //     ],
+    //   }
+    //   this.setState(data)
+    //   count = count + 0.01
+    //   if (count === 10) {
+    //     clearInterval(intervalId);
+    //   }
+    // }, 1000)
+  }
+  render() {
+    const h = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight || 0,
+    );
+    const w = Math.max(
+      document.documentElement.clientWidth,
+      window.innerWidth || 0,
+    );
+    return (
+      <div style={{ overflow: 'hidden' }}>
+        <Typography.Title level={1}>
+          Lightning Jackpot. Winner takes all!
+        </Typography.Title>
+        <Treemap
+          animation={{ stiffness: 120, damping: 17 }}
+          // animation
+          mode='squarify'
+          data={this.state.data}
+          height={h - 100}
+          width={w}
+          margin={0}
+          getLabel={x => x.name}
+          colorType='literal'
+          // onLeafClick={() => this.setState({data: randomData()})}
+          sortFunction={(a, b) => {
+            return b.height - a.height || b.value - a.value;
+          }}
+        />
+      </div>
+    );
+  }
+}

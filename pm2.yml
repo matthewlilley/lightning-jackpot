@@ -1,0 +1,24 @@
+apps:
+  - name: app
+    script: dist/backend/index.js
+    instances: 1
+    exec_mode: cluster
+    env:
+      PM2_EXTRA_DISPLAY: true
+
+  - name: invoice-stream
+    script: dist/backend/invoice-stream.js
+    # env:
+    #   GRPC_TRACE: all,-api
+    #   GRPC_VERBOSITY: DEBUG
+
+  - name: roulette
+    script: dist/backend/roulette/worker.js
+
+  - name: queue
+    script: dist/backend/queue/index.js
+    env:
+      NODE_DEBUG: bull
+
+  - name: scheduler
+    script: dist/backend/scheduler/index.js

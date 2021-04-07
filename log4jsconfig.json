@@ -1,0 +1,30 @@
+{
+  "appenders": {
+    "stdout": {
+      "type": "stdout",
+      "layout": {
+        "type": "messagePassThrough"
+      }
+    },
+    "stderr": {
+      "type": "stderr",
+      "layout": {
+        "type": "pattern",
+        "pattern": "%d %p %f:%l %m%n"
+      }
+    },
+    "error": {
+      "type": "logLevelFilter",
+      "level": "error",
+      "appender": "stderr"
+    }
+  },
+  "categories": {
+    "default": {
+      "appenders": ["stdout", "error"],
+      "level": "debug",
+      "enableCallStack": true
+    }
+  },
+  "disableClustering": true
+}

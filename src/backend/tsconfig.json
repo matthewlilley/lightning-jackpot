@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "commonjs",
+    "outDir": "../../dist/backend",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2018", // node 10
+    "isolatedModules": false,
+    "incremental": true,
+    "preserveWatchOutput": true
+  },
+  "include": ["server.d.ts", "**/*.ts"]
+}

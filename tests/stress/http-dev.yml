@@ -1,0 +1,13 @@
+config:
+  target: 'https://localhost:1337'
+  tls:
+    rejectUnauthorized: false
+  http:
+    # Responses have to be sent within 10 seconds or the request will be aborted
+    timeout: 10
+    # All HTTP requests from all virtual users will be sent over the same 10 connections
+    pool: 10
+scenarios:
+  - flow:
+      - get:
+          url: '/'

@@ -1,0 +1,7 @@
+Contact: mailto:hello@matthewlilley.com
+Encryption: https://keybase.pub/matthewlilley
+Acknowledgments:
+Preferred-Languages: en
+Canonical: https://lightningjackpot.com/.well-known/security.txt
+Policy:
+Hiring:

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "lib": ["es2015"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}

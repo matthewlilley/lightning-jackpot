@@ -1,0 +1,287 @@
+@import "./page-transition.less";
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.lightning-jackpot .ant-layout {
+  background: white;
+}
+
+.bet-form {
+  text-align: center;
+}
+
+.lightning-jackpot .bet-form .ant-form-item {
+  white-space: nowrap;
+}
+
+.lightning-jackpot .bet-form .ant-form-item-label, .ant-modal-content .bet-form .ant-form-item-label {
+  text-align: center;
+}
+
+/* App Header */
+.app-header {
+  display: grid !important;
+  height: 64px;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.app-header > :first-child {
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+}
+
+.app-header-center > :first-child {
+  display: none;
+}
+
+.app-header > :last-child {
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+}
+
+.app-header-mobile-dropdown {
+  display: inline-block;
+}
+
+.app-header-logo-text,
+.app-header-avatar,
+.app-header-desktop-dropdown {
+  display: none;
+}
+
+.logo {
+  margin: 16px 8px 16px 0;
+}
+
+.trigger {
+  display: flex;
+  font-size: 16px;
+  line-height: 64px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.3s;
+  color: #722ed1;
+}
+
+.trigger:hover {
+  color: #9254de;
+}
+
+.github-picker {
+  box-shadow: none !important;
+  background: inherit !important;
+  border: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/*
+  Sidebar
+*/
+
+.app-sidebar {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.app-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.app-sidebar.ant-layout-sider {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  flex: 0 0 100% !important;
+  min-width: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: 2;
+}
+
+.app-sidebar.ant-layout-sider.ant-layout-sider-collapsed {
+  flex: 0 0 0 !important;
+  min-width: 0 !important;
+  width: 0 !important;
+  max-width: 0 !important;
+}
+
+/* Chat */
+.chat {
+  display: flex;
+  height: 100%;
+}
+
+.chat-text {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chat-emoji-large {
+  font-size: 28px;
+}
+
+.message {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.emoji-mart {
+  border-radius: 0;
+  border: 0;
+  border-top: 1px solid #e8e8e8;
+}
+
+/* Verifier */
+.verifier-form .ant-form-item {
+  display: flex;
+}
+
+.verifier-form .ant-form-item-control-wrapper {
+  flex: 1;
+}
+
+/*  Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .app-sidebar.ant-layout-sider {
+    flex: 0 0 100% !important;
+    min-width: 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+/*  Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  // .ant-layout-header {
+  //   padding: 0 50px;
+  // }
+
+  .app-header-center > :first-child {
+    display: inline-block;
+  }
+
+  .ant-layout-footer {
+    padding: 24px 16px;
+  }
+
+  .app-header-deposit-text {
+    display: inline-block;
+    margin-left: 4px;
+  }
+
+  .app-header-mobile-dropdown {
+    display: none;
+  }
+
+  .app-header-desktop-dropdown {
+    display: flex;
+  }
+
+  .app-header-logo-text {
+    display: inline-block;
+  }
+
+  .app-header-avatar {
+    display: block;
+  }
+}
+
+/*  Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .app-sidebar.ant-layout-sider {
+    position: relative !important;
+    flex: 0 0 275px !important;
+    min-width: 275px !important;
+    width: 275px !important;
+    max-width: 275px !important;
+  }
+}
+
+/*  Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .app-sidebar.ant-layout-sider {
+    flex: 0 0 300px !important;
+    min-width: 300px !important;
+    width: 300px !important;
+    max-width: 300px !important;
+  }
+}
+
+/*  Extra extra large devices (extra large desktops, 1600px and up) */
+@media (min-width: 1600px) {
+  .app-sidebar.ant-layout-sider {
+    flex: 0 0 400px !important;
+    min-width: 400px !important;
+    width: 400px !important;
+    max-width: 400px !important;
+  }
+}
+
+.kpi {
+  position: relative;
+}
+
+@keyframes point-up-animation {
+  0% {
+    transform: translate3d(0, -1px, 0);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0);
+  }
+  100% {
+    transform: translate3d(0, -1px, 0);
+  }
+}
+
+span.point-up {
+  animation-name: point-up-animation;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  display: inline-block;
+  transform: perspective(1px) scale(1.1);
+}
+
+span.wave {
+  animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
+  animation-duration: 2.5s; /* Change to speed up or slow down */
+  animation-iteration-count: infinite; /* Never stop waving :) */
+  transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+  display: inline-block;
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-10deg);
+  }
+  20% {
+    transform: rotate(12deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  40% {
+    transform: rotate(9deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

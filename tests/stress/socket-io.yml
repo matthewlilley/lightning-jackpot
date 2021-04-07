@@ -1,0 +1,24 @@
+config:
+  target: 'https://testnet.lightningjackpot.com'
+  # socketio:
+  #   query: "user_id=0xc0ffee&color=blue"
+  phases:
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: 'Warm up the application'
+    - duration: 600
+      arrivalRate: 50
+      name: 'Sustained max load'
+scenarios:
+  - engine: 'socketio'
+    flow:
+      - emit:
+          channel: 'global'
+          data:
+            {
+              'id': 9000000000000,
+              'author': 'Anon',
+              'value': 'This is a test',
+              'avatar': 'https://picsum.photos/26/26',
+            }

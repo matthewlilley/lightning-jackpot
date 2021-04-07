@@ -1,0 +1,4 @@
+bin
+dist
+src/packages/**/node_modules
+src/packages/**/dist

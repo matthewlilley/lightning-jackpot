@@ -1,0 +1,74 @@
+import { Card, List, Typography } from 'antd'
+
+import { Component } from 'react'
+import getConfig from 'next/config'
+
+const {
+  publicRuntimeConfig: { APP_URL },
+} = getConfig()
+
+const data = [
+  {
+    title: 'Title 1',
+  },
+  {
+    title: 'Title 2',
+  },
+  {
+    title: 'Title 3',
+  },
+  {
+    title: 'Title 4',
+  },
+  {
+    title: 'Title 5',
+  },
+  {
+    title: 'Title 6',
+  },
+]
+
+export default class Instances extends Component<any> {
+  static defaultProps = {
+    instances: [],
+  }
+  static async getInitialProps({ store, isServer, query }) {
+    console.log('instances getInitialProps', query)
+    const response = await fetch(`${APP_URL}/api/v0/instances`)
+    const instances = await response.json()
+    return { instances }
+  }
+  renderItem = item => (
+    <List.Item>
+      <Card title={`#${item.id}`} size="small">
+        <List size="small" itemLayout="horizontal">
+          <List.Item>Type: {item.state.winningType}</List.Item>
+          <List.Item>Number: {item.state.winningNumber}</List.Item>
+          <List.Item>Server Hash: ...</List.Item>
+          <List.Item>Server Seed: ...</List.Item>
+          <List.Item>Client Seed: ...</List.Item>
+        </List>
+      </Card>
+    </List.Item>
+  )
+  render() {
+    return (
+      <div>
+        <Typography.Title>Instances</Typography.Title>
+        <List
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 4,
+            lg: 4,
+            xl: 6,
+            xxl: 3,
+          }}
+          dataSource={this.props.instances}
+          renderItem={this.renderItem}
+        />
+      </div>
+    )
+  }
+}

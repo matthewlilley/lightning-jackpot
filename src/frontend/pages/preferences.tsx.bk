@@ -1,0 +1,18 @@
+import { PreferencesForm } from '../forms'
+import getConfig from 'next/config'
+
+const {
+  publicRuntimeConfig: { APP_URL },
+} = getConfig()
+
+function Preferences({ preferences }) {
+  return <PreferencesForm />
+}
+
+// Preferences.getInitialProps = async () => {
+//   const response = await fetch(`${APP_URL}/api/v0/preferences`);
+//   const preferences = await response.json();
+//   return { preferences };
+// }
+
+export default Preferences
